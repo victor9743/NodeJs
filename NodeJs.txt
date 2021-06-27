@@ -1,0 +1,36 @@
+node js
+ JS Runtime Enviroment -> ambiente de execução javascript
+
+o que é um framework -> é um conjunto de regras  já aplicadas em um pacote
+
+
+google v8 -> interpretador de javascript para máquina
+	     criado em c++
+
+
+
+
+para exportar codigo
+
+modules.exports ={
+
+
+}
+
+para requerir uma esportação
+
+const variavel = require("/caminho do arquivo")
+
+
+inciando um servidor
+const variavel =require("http")
+
+variavel.createServer( (req, res) => {
+	res.white("hello wolrd");
+	res.end()
+}).listen(8080)
+
+
+Iniciando um pacote npm 
+	npm init -y
+

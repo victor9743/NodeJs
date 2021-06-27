@@ -1,0 +1,12 @@
+{
+  "name": "pacote-npm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node teste.js"
+  },
+  "author": "Victor Costa",
+  "license": "ISC",
+  "dependencies": {}
+}
