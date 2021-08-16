@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CADASTRO DE PRODUTOS</title>
+</head>
+<body>
+    <h3>Cadastro de Produtos</h3>
+
+    <form action="/produtos/salvar" method="POST">
+
+        <input name="nome_produto" id="nome_produto" type="text" value="<%= produto.nome_produto %>"><br>
+
+        <input name="preco" id="preco" value="<%= produto.preco %>" type="number"><br>
+
+        <input name="validade" id="validade" value="<%= produto.validade %>" type="date"><br>
+
+        <textarea name="observacao" id="observacao" <%= produto.observacao %> id="" cols="30" rows="10"></textarea>
+
+        <button type="submit">Cadastrar</button>
+    
+    </form>
+    
+</body>
+</html>
