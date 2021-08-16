@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery-3.6.0.js"></script>
+    <title>Document</title>
+    <script>
+        $(document).ready(function(){
+
+            $("#enviar").click(function(){
+
+                var formulario = new FormData();
+
+                var descricao = document.getElementById("descricao").value;
+                var data_financa = document.getElementById("data_financa").value;
+                var valor_financa = document.getElementById("valor_financa").value;
+
+                formulario.append("descricao_financa", descricao);
+                formulario.append("data_financa", data_financa.substr(0,10));
+                formulario.append("valor_financa", valor_financa);
+
+                var dados = new XMLHttpRequest();
+
+                dados.open("POST","http://localhost:3000/envio");
+                dados.send(formulario);
+                window.location.href="/";
+
+                
+                
+            })
+
+         
+            //  carregar  dados
+            $.ajax({   
+
+                url: "http://localhost:3000/valores",
+                type: "GET",
+                success: function(data){
+        
+                   
+                //    mostrar valores
+                    for(var x = 0; x<data.length; x++){
+                        document.getElementById("corpo_tabela").innerHTML += "<tr><td>"+(x+1)+"</td>"+
+                                                                            "<td>"+data[x].descricao_financa+"</td>"+
+                                                                            "<td>"+data[x].valor_financa+"</td>"+ 
+                                                                            "<td>"+data[x].data_financa.substr(0,10)+"</td>"+
+                                                                            "<td><button class='btn_detalhes' value='"+[x]+"'>detalhes</button></td>"+
+                                                                            "<td><button class='btn_remover' value='"+data[x].id_financa+"'>Remover</button></td></tr>"
+
+                    } 
+                    
+                // detalhes
+                    $(".btn_detalhes").click(function(){
+                                  //  carrega a pagina campo
+
+                        var id = this.value;
+
+                        var id_financa = data[id].id_financa;
+
+                        console.log(id_financa);
+                
+
+                        var descricao = data[id].descricao_financa;
+
+                        var valor_financa =  data[id].valor_financa
+                        var data_financa =  data[id].data_financa;    
+
+                   
+
+                        $("#detalhes").append(
+                            "<h3>Detalhes</h3>"+
+                            "<input type='text' name='descricao_detalhes' value='"+descricao+"' id='descricao_detalhes' readonly><button class='editar'>Editar</button><br>"+
+
+                            "<p>Data</p>"+
+                            "<input type='date' name='data_financa_detalhes' value='"+data_financa.substr(0,10)+"' id='data_detalhes' readonly><button class='editar'>Editar</button><br>"+
+
+                            "<input type='number' name='valor_financa_detalhes' id='valor_detalhes' value='"+valor_financa+"' readonly><button class='editar'>Editar</button><br>"+
+
+                            "<button id='atualizar'>Atualizar</button>"
+
+                        );
+                        $(".editar").click(function(){
+                            document.getElementById("descricao_detalhes").readOnly = false;
+                            document.getElementById("data_detalhes").readOnly = false;
+                            document.getElementById("valor_detalhes").readOnly = false;
+                        })
+
+                        $("#atualizar").click(function(){
+
+                            dadosUpdate = new FormData; 
+
+                            var descricao_financa = document.getElementById("descricao_detalhes").value;
+                            var data_financa = document.getElementById("data_detalhes").value;
+                            var valor_financa = document.getElementById("valor_detalhes").value;
+
+
+
+
+                            dadosUpdate.append("descricao_financa", descricao_financa);
+                            dadosUpdate.append("data_financa", data_financa.substr(0,10));
+                            dadosUpdate.append("valor_financa", valor_financa);
+
+
+
+                            var xrh = new XMLHttpRequest;
+
+                            xrh.open("PUT","http://localhost:3000/update/"+id_financa);
+                            
+                            window.location.href="/";
+
+
+                            xrh.send(dadosUpdate);
+
+                            
+                            
+                        });                          
+
+
+                    
+
+                    });
+                    // remover
+                    $(".btn_remover").click(function(){
+
+                        var id = this.value;
+
+                        var xhr = new XMLHttpRequest;
+                        
+                        xhr.open("DELETE", "http://localhost:3000/delete/" + id);
+
+                        console.log(xhr.responseText);
+
+                        window.location.href="/";
+                        xhr.send();
+
+            
+                    
+
+
+                        
+                       
+                    });
+
+                    
+                },
+                error:()=>{
+                    console.log("erro");
+                }
+            })
+                
+            
+        
+
+        })
+
+    </script>
+</head>
+<body>
+    
+    <p>Descrição</p>
+
+    <input type="text" name="descricao" id="descricao"><br>
+
+    <p>Data</p>
+    <input type="date" name="data_financa" id="data_financa"><br>
+
+    <input type="number" name="valor_financa" id="valor_financa"><br>
+
+    <button id="enviar">Enviar</button>
+
+    <div id="detalhes" style="border: 1px solid green">
+
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>descricao</th>
+                <th>valor</th>
+                <th>data</th>
+            </tr>
+        </thead>
+        <tbody id="corpo_tabela">
+        </tbody>
+    </table>
+
+    
+</body>
+</html>

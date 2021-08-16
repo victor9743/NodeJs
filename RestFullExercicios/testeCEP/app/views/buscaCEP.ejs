@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca CEP</title>    
+
+    <script src="jquery-3.6.0.js"></script>
+    <script>
+
+        $(document).ready(function(){
+
+            document.getElementById("cep_number").onchange = function(){
+
+                var cep = this.value;
+
+                $.ajax({      
+                    url: "https://viacep.com.br/ws/"+cep+"/json",
+                    type: "GET",
+                    success: function(data){
+
+                        $.ajax({
+                            url: "https://servicodados.ibge.gov.br/api/v1/localidades/estados/"+data.uf+"",
+                            type: "GET",
+                            success: function(estado){
+
+                                console.log(estado);
+
+                                document.getElementById("informacoes").innerHTML = "<label>Rua</label><br><input type='text' value='"+data.logradouro+"' readonly><br>"+
+                                                                        "<label>Bairro</label><br><input type='text' value='"+data.bairro+"' readonly><br>"+
+                                                                        "<label>Cidade</label><br><input type='text' value='"+data.localidade+"' readonly><br>"+
+                                                                        "<label>Estado</label><br><input type='text' value='"+estado.nome+ "' readonly><br>"
+                             
+                            }
+                        })
+                               
+
+                    },
+                    error: function(){
+                        document.getElementById("informacoes").innerHTML = "CEP INVÁLIDO"
+                    }
+
+                })
+
+
+
+            }
+
+          
+
+    
+
+              
+
+          
+       
+
+
+         
+
+    });
+    </script>
+</head>
+<body>
+    
+    <div id="form_cep">
+
+        <p>Cep Number</p>
+        <input type="number" id="cep_number">
+
+        <div id="informacoes">
+
+        </div>
+
+
+    </div>
+
+
+
+    
+</body>
+</html>
